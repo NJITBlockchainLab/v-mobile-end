@@ -1,3 +1,5 @@
+import { Config } from 'react-native-config'
+
 import { PINValidationRules } from './types/security'
 
 const lengthOfHiddenAttributes = 10
@@ -18,6 +20,8 @@ export enum LocalStorageKeys {
   RevokedCredentialsMessageDismissed = 'RevokedCredentialsMessageDismissed',
   Preferences = 'PreferencesState',
   Migration = 'MigrationState',
+  Agent = 'AgentState',
+  ProofReq = 'ProofReqState',
   Tours = 'ToursState',
 }
 
@@ -74,7 +78,7 @@ export const PINRules: PINValidationRules = {
   no_cross_pattern: false,
 }
 
-export const domain = 'didcomm://invite'
+export const domain = Config.DOMAIN
 
 export const tourMargin = 25
 

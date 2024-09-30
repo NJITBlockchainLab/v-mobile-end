@@ -23,7 +23,7 @@ const translation = {
     "Done": "Feito",
     "Skip": "Pular",
     "View": "Visualizar",
-    "Home": "Home",
+    "Notification": "Notification",
     "ErrorCode": "Código de Erro",
     "Okay": "OK",
     "GoBack": "Voltar",
@@ -175,6 +175,12 @@ const translation = {
     "ToContinueUsing": "Para continuar usando a funcionalidade de scan da FHWA, favor permitir o uso da câmera.",
     "OpenSettings": "Abrir as configurações",
   },
+  "BluetoothDisclosure": {
+    "AllowUse": "Allow bluetooth use",
+    "Disclosure": "The bluetooth is used to search and connect with other devices.",
+    "ToContinueUsing": "To continue using the FHWA bluetooth feature, please allow bluetooth permissions.",
+    "OpenSettings": "Open settings",
+  },
   "PINCreate": {
     "Message": {
       "CrossPatternValidation": "Um padrão de X foi detectado no seu PIN. Favor tentar novamente.",
@@ -226,6 +232,8 @@ const translation = {
   "ScanBLE": {
     "BluetoothText": "Please turn on Bluetooth to continue.",
     "Text1": "Certifique-se de que o Bluetooth esteja ativado em ambos os dispositivos. Use o botão abaixo para procurar dispositivos disponíveis e enviar um convite para conexão.",
+    "Text2": "Dispositivos disponíveis",
+    "Text3": "Nenhum dispositivo encontrado",
     "Toggle": "Alternar descoberta de Bluetooth",
     "ScanDevices": "Procurar dispositivos",
     "MakeDiscoverable": "Tornar detectável"
@@ -261,6 +269,9 @@ const translation = {
     "PeopleAndOrganizations": "Pessoas e organizações com as quais você interagiu estão listadas aqui.",
     "WhatAreContacts": "O que são Contatos?",
     "AddContact": "Adicionar um Contato",
+    "Infrastructure": "Infraestrutura",
+    "CA": "Autoridade Certificadora (CA)",
+    "NoContacts": "Nenhum contato para mostrar",
   },
   "ContactDetails": {
     "Created": "Criado",
@@ -322,7 +333,7 @@ const translation = {
     "IssuedBy": "Emitida por:",
     "RemoveCredential": "Remover Credencial",
   },
-  "Home": {
+  "Notification": {
     "Welcome": "Bem Vindo",
     "Notifications": "Notificações",
     "NoNewUpdates": "Você não tem novas notificações.",
@@ -483,9 +494,11 @@ const translation = {
     "Developer": "Opções de Desenvolvedor"
   },
   "TabStack": {
-    "Home": "Notificações",
+    "Notification": "Notificações",
     "Scan": "Scanear",
     "Credentials": "Credenciais",
+    "Contacts": "Contatos",
+    "ServiceContacts": "Contatos de Serviço",
   },
   "RootStack": {
     "Contacts": "Contatos",
@@ -514,7 +527,7 @@ const translation = {
     "Terms": "Termos & Condições",
     "CreatePIN": "Criar um PIN",
     "EnterPIN": "Digitar o PIN",
-    "Home": "Notificações",
+    "Notification": "Notificações",
     "Scan": "Scanear",
     "Credentials": "Credenciais",
     "CredentialDetails": "Detalhes de Credencial",

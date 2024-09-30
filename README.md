@@ -1,48 +1,175 @@
-# Bifold README.md
+# Developers Guide
 
-# Summary
+The following document is intended to help developers get started with the project. It includes information on how to set up your development environment, build the project, and run the app in an emulator.
 
-Aries Mobile Agent React Native (Bifold) is an open-source mobile Aries client that's part of the [Hyperledger Foundation](https://www.hyperledger.org/), a global ecosystem committed to advancing enterprise-grade blockchain technologies. This project is centered around Verifiable Credentials (VC), using blockchain and best in-class cryptography technology to deliver trusted, secure data exchanges.
+# Project Overview
 
-Designed with React Native, Bifold offers cross-platform capabilities, supporting a wide range of use-cases and devices. Bifold is built on the Aries Framework Javascript (AFJ), providing a solid foundation for its architecture.
+The application is a user-friendly mobile agent that is built with React Native and uses Aries Framework JavaScript (AFJ) to exchange verifiable credentials with other agents. While AFJ handles the heavy lifting of verifiable credential work, it focuses on user experience and interactions with these credentials.
 
-Our aim is to cultivate a collaborative environment, bringing together organizations and individuals to prevent duplicate efforts and to promote shared solutions. By doing so, we hope to accelerate the adoption of VC technology across various sectors.
+Key points to note:
 
-One of Bifold's key features is its capacity to hold and utilize VCs in the AnonCreds format. We are also diligently working towards supporting other formats, such as W3C, through the AFJ project. This flexibility makes Bifold a versatile tool for complex or specific use-case projects, streamlining the process of initiating and managing VCs.
+- AFJ uses some Rust libraries, specifically Indy-SDK, which are compiled into native code. These libraries will soon be replaced by Indy-VDR and AnonCreds-rs.
+- The application uses the AFJ library, which in turn uses these Rust libraries.
+- The Indy-SDK library has been cross-compiled for ARM CPU architecture, meaning it works on iOS devices and Android devices/emulators but not on iOS simulators.
+- Indy-SDK uses the ZMQ protocol to interact with the Indy ledgers. This might be blocked by some corporate firewalls as it's a non-standard protocol that doesn't use HTTP/s.
+- AFJ uses the HTTP protocol to communicate with Aries agents and WebSockets for messaging via a mediator.
+- The application relies on a mediator because mobile devices don't have a fixed IP address and often don't accept inbound network connections. The mediator, a service that runs on a server with a fixed IP address, relays messages between an agent and the app. The mediator is configured,
 
-Join us as we work towards a future where verifiable credentials are easily accessible and widely adopted, enhancing trust and security in the digital world.
+## Setup
 
-# Current Status
+The setup is similar to other React Native projects. The following sections will walk you through the process of setting up your development environment, installing dependencies, and running the app in an emulator.
 
-Currently, we're updating Bifold's architecture to make it easier to maintain and customize for various use cases. Check out our [design roadmap issue](https://github.com/hyperledger/aries-mobile-agent-react-native/issues/754) for more information, and we welcome your feedback.
+### Prerequisites
 
-## Contributing
+This is a [yarn](https://yarnpkg.com) based project, not [npm](https://www.npmjs.com/). You will need to install yarn if you don't already have it installed. Also, you will need a version of node that is compatible with the version of yarn specified in the `engines` field of [./package.json](./package.json). If you don't have a compatible version of node installed, you can use [nvm](https://github.com/nvm-sh/nvm) to install a compatible version of node.
 
-We warmly welcome contributions to the Bifold project! If you're interested in joining our community, please start by reading our [Contributor's Guide](./CONTRIBUTING).
+```sh
+npm install -g yarn
 
-## Community
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
-Joining the Bifold community on Hyperledger's Discord is a breeze:
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-1. Head to https://discord.com/invite/hyperledger
-2. Click on 'Accept the invite'
-3. Dive into the various channels!
+nvm install 18.18
 
-`#bifold` is our main discussion channel for everything Bifold wallet related. And since Bifold uses Aries Framework Javascript (AFJ) extensively, you might also want to join the `#aries-javascript` channel for deeper technical conversations. We can't wait to see you there!
+nvm use 18.18
+```
 
-Additionally, we hold a bi-weekly user group meeting. You can find the updated schedule, past agendas, and meeting recordings on this [wiki page](https://wiki.hyperledger.org/display/ARIES/Aries+Bifold+User+Group).
+This project will need to run on an iOS device or Android device or emulator. While it is recommended to test your software on both, especially if you're contributing back to the project, for demonstration purposes you can choose one or the other.
 
-Please note, being part of the Hyperledger Foundation, we expect all interactions to adhere to the [Antitrust Policy](https://wiki.hyperledger.org/download/attachments/29034696/Antitrustnotice.png?version=1&modificationDate=1581695654000&api=v2) and [Code of Conduct](https://wiki.hyperledger.org/display/HYP/Hyperledger+Code+of+Conduct).
+[Android Studio](https://developer.android.com/studio)
+[Apple Xcode](https://developer.apple.com/xcode/)
 
-# Development
+**ProTip 🤓**
 
-To better understand the technical aspects of the Bifold project including how to set it up and run it please see the following documents:
+If you are using Mac OS with ARM64 chip, see this [suggested setup](./DEVELOPER_MACOS_arm64.md)
 
-1. [Developers Guide](./DEVELOPER.md)
+### Setup & Configure for All Platforms
 
-# Success Stories
+Install all the package dependencies by running the following command from the root of the cloned repository:
 
-The organizations or jurisdictions listed below have either deployed a project based on Bifold, are currently assessing the technology, or are actively developing a solution. If you want your organization to be included in this list, please submit a Pull Request against this README.md.
+```sh
+yarn install
+```
 
-- [BC Wallet](https://apps.apple.com/us/app/bc-wallet/id1587380443)
-  The BC Wallet is a digital wallet app developed by the Government of British Columbia.
+Some packages need to be built (transpiled) before they can be used from the app. Do this with the following command:
+
+```sh
+yarn run build
+```
+
+As noted above the application requires a mediator to communicate with other Agents. For development purposes, this can be set by creating a `.env` file in the following directory:
+
+```sh
+touch packages/legacy/app/.env
+```
+
+Add a line to the `.env` file with the following content:
+
+```text
+MEDIATOR_URL=https://public.mediator.indiciotech.io?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMDVlYzM5NDItYTEyOS00YWE3LWEzZDQtYTJmNDgwYzNjZThhIiwgInNlcnZpY2VFbmRwb2ludCI6ICJodHRwczovL3B1YmxpYy5tZWRpYXRvci5pbmRpY2lvdGVjaC5pbyIsICJyZWNpcGllbnRLZXlzIjogWyJDc2dIQVpxSktuWlRmc3h0MmRIR3JjN3U2M3ljeFlEZ25RdEZMeFhpeDIzYiJdLCAibGFiZWwiOiAiSW5kaWNpbyBQdWJsaWMgTWVkaWF0b3IifQ==
+```
+
+You can use the above mentioned public mediator hosted by Indecio or set up your own mediator. See [Aries Mediator](https://github.com/hyperledger/aries-mediator-service) for more information.
+
+## Running on an Android Device or Emulator
+
+The simplest way to run the application on Android is via Android Studio. Here's how:
+
+1. Open Android Studio.
+2. Select `File -> Open` and navigate to the `packages/legacy/app/android` directory. This will load the project into Android Studio.
+3. Run the app on a connected device or emulator by selecting one from the list and clicking the green 'Play' button.
+
+If you prefer using the command line interface (CLI), follow these steps:
+
+### For Linux
+
+(Note: The following instructions assume you have Android Studio and the Android SDK installed in your home directory. If your setup is different, adjust the paths accordingly.)
+
+1. List the available emulators:
+
+   ```sh
+   ~/Android/Sdk/emulator/emulator -list-avds
+   ```
+
+   If no emulators are listed, check the Android Studio documentation to set up an emulator.
+
+**ProTip 🤓**
+
+Don't use the emulator located at `~/Android/Sdk/tools/emulator` its older, deprecated, and will probably complain about missing the x86 emulator for newer SDK versions.
+
+2. Start an emulator from the list:
+
+   ```sh
+   ~/Android/Sdk/emulator/emulator -avd Pixel_5_API_25 -netdelay none -netspeed full
+   ```
+
+**ProTip 🤓**
+
+Use `-partition-size 1024` to increase the size of the emulator's data partition. This is useful if you're running the app in the emulator for an extended period of time.
+
+3. Start Metro, the React Native packager:
+
+   ```sh
+   cd packages/legacy/app
+   yarn start
+   ```
+
+4. Make sure you have the `JAVA_HOME` and `ANDROID_HOME` environment variables set correctly:
+
+   ```sh
+   export JAVA_HOME=~/android-studio/jre
+   export ANDROID_HOME=~/Android/Sdk
+   ```
+
+5. Allow the Android emulator to communicate with Metro on port `tcp:8097`:
+
+   ```sh
+   ~/Android/Sdk/platform-tools/adb reverse tcp:8097 tcp:8097
+   ```
+
+6. Finally, run the app in the emulator:
+
+   ```sh
+   cd packages/legacy/app
+   yarn run android
+   ```
+
+This will launch the application on your selected Android emulator for development and testing.
+
+## Running the Application on an iOS Device
+
+Please note, you can't run the iOS version of the application on an iOS simulator – it must be run on an actual iOS device. To develop for iOS, you'll need a Mac with Xcode installed and potentially a developer team membership to execute the application on your device.
+
+The easiest way to run the application on an iOS device is through Xcode, as outlined below:
+
+1. Install the [Cocoapods](https://cocoapods.org/) package manager. You can use brew or any method you prefer:
+
+```sh
+brew install cocoapods
+```
+
+2. Install the necessary dependencies:
+
+```sh
+cd packages/legacy/app/ios
+pod install
+```
+
+3. Open the workspace (not the project file) in Xcode:
+
+```sh
+open packages/legacy/app/ios/ariesbifold.xcworkspace
+```
+
+4. In Xcode, select your device, development team, and (if necessary) your Bundle ID. Note: Detailing these steps is beyond the scope of this guide.
+
+5. Run the app on your device by clicking the 'Play' button in Xcode. This will launch Bifold on your selected iOS device for development and testing. It will also launch Metro, the React Native packager, in a separate terminal window. If you prefer to do this manually use the following command:
+
+```sh
+cd packages/legacy/app
+yarn start
+```
+
+
