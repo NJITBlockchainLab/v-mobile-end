@@ -4,7 +4,7 @@
 ## Project Structure Overview
 All the application's source files, assets, and components are in the `App` folder, which can be found within the `packages/legacy/core/App` directory from the root folder.
 
-```sh
+```
 packages/legacy/core/App/
 |─ assets/                    # Contains static resources like images, fonts, and stylesheets
 |─ components/                # Organized UI components, divided into subdirectories based on functionality
@@ -26,7 +26,7 @@ packages/legacy/core/App/
 
 ### Assets
 
-```sh
+```
 packages/legacy/core/App/assets
 |─  oca-bundles.json          # JSON file likely related to Open Credential Architecture (OCA)
 |─ fonts/                     # Contains font files used in the app 
@@ -45,7 +45,7 @@ packages/legacy/core/App/assets
 The `components/` folder contains all the React components used across the application. These components are divided into subfolders based on their functionality, ensuring modularity and ease of maintenance.
 
 - **`animated/`**: This subfolder contains animated components used to display loading indicators or transition effects in the UI.
-```sh
+```
 components/animated/
 |─ ButtonLoading.tsx          # Displays a loading animation for buttons
 |─ ConnectionLoading.tsx      # Loading animation for connection establishment
@@ -58,7 +58,7 @@ components/animated/
 ```
 
 - **`buttons/`**: This folder holds various button components used for navigation and action handling throughout the app.
-```sh
+```
 components/buttons/
 |─ Button.tsx              # Generic button for reusable actions
 |─ HeaderButton.tsx        # Button displayed in the header section
@@ -69,7 +69,7 @@ components/buttons/
 ```
 
 - **`chat/`**: Components related to chat features, including message bubbles and input fields.
-```sh
+```
 components/chat/
 |─ ActionSlider.tsx      # Slider for choosing actions in chat
 |─ ChatActions.tsx       # Displays available chat actions
@@ -81,7 +81,7 @@ components/chat/
 ```
 
 - **`inputs/`**: Input components that handle various types of data input, such as checkboxes, text fields, and PIN input fields.
-```sh
+```
 components/inputs/
 |─ CheckBoxRow.tsx          # Checkbox input in a row layout
 |─ LimitedTextInput.tsx     # Text input with character limit
@@ -90,14 +90,14 @@ components/inputs/
 ```
 
 - **`listItems/`**: Components for displaying items in a list format, such as contacts and notifications.
-```sh
+```
 components/listItems/
 |─ ContactListItem.tsx          # Represents a contact in a list
 └─ NotificationListItem.tsx     # Represents a notification in a list
 ```
 
 - **`misc/`**: Contains miscellaneous components that don’t fit into specific categories but are important for various functionalities in the app.
-```sh
+```
 components/misc/
 |─ ActivityLogLink.tsx      # Link to activity log
 |─ AvatarView.tsx           # Displays user avatars
@@ -114,7 +114,7 @@ components/misc/
 ```
 
 - **`modals/`**: Modal components used to display pop-ups and alerts across the application.
-```sh
+```
 components/modals/
 |─ AlertModal.tsx           # Modal for displaying alerts
 |─ CommonRemoveModal.tsx    # Modal for removal confirmations
@@ -124,13 +124,13 @@ components/modals/
 ```
 
 - **`network/`**: Components related to network status and connectivity information.
-```sh
+```
 components/network/
 └─ NetInfo.tsx            # Displays network information and connectivity status
 ```
 
 - **`record/`**: Components that manage and display data records, including fields and headers.
-```sh
+```
 components/record/
 |─ Record.tsx             # Main record display component
 |─ RecordBinaryField.tsx  # Displays binary fields in a record
@@ -140,7 +140,7 @@ components/record/
 ```
 
 - **`texts/`**: Text and label components used for displaying different types of text across the app.
-```sh
+```
 components/texts/
 |─ HeaderTitle.tsx        # Header title text
 |─ HighlightTextBox.tsx   # Text box with highlighted content
@@ -150,14 +150,14 @@ components/texts/
 ```
 
 - **`toast/`**: Toast notification components that display transient messages.
-```sh
+```
 components/toast/
 |─ BaseToast.tsx           # Base toast component
 └─ ToastConfig.tsx         # Toast configuration
 ```
 
 - **`tour/`**: Components related to the tour or step-by-step walkthroughs in the app.
-```sh
+```
 components/tour/
 |─ CredentialOfferTourSteps.tsx  # Steps for offering credentials during tour
 |─ HomeTourSteps.tsx             # Steps for home screen tour
@@ -166,7 +166,7 @@ components/tour/
 ```
 
 - **`views/`**: Contains components related to layout sections of the app, such as headers and footers.
-```sh
+```
 components/views/
 |─ HomeFooterView.tsx      # Footer view for the home screen
 |─ HomeHeaderView.tsx      # Header view for the home screen
@@ -181,7 +181,7 @@ This structure provides a clear and organized overview of the `components/` fold
 The `configs/` folder contains the configuration files necessary for managing different parts of the application's setup, particularly focused on ledger management and testing.
 
 - **`ledgers/`**: This subfolder holds configurations related to ledger management. In this case, it specifically focuses on `indy` ledger technology. It also includes mock data used for testing purposes.
-```sh
+```
 configs/ledgers/
 |─ indy/
     |─ index.ts             # Main index file for the Indy ledger configuration
@@ -196,7 +196,7 @@ configs/ledgers/
 
 The `contexts/` folder contains files that handle the global state management of the application using React’s Context API. It provides a centralized way to manage various application states such as authentication, network, configuration, and theme.
 
-```sh
+```
 contexts/
 |─ animated-components.ts    # Manages the state of animated components across the app
 |─ auth.tsx                  # Handles authentication context for managing user login state
@@ -241,7 +241,7 @@ This structure ensures that global state management is centralized and accessibl
 
 The `hooks/` folder contains custom React hooks designed to abstract and reuse stateful logic across components. These hooks help manage different application functionalities, such as connections, credentials, and notifications.
 
-```sh
+```
 hooks/
 |─ connections.ts             # Manages connection-related logic in the app
 |─ credentials.ts             # Handles logic related to managing credentials
@@ -255,7 +255,7 @@ hooks/
 
 The `localization/` folder manages the language resources for internationalizing the application. This structure supports multiple languages, making the app accessible to a wider audience.
 
-```sh
+```
 localization/
 |─ index.ts           # Main index file for exporting language configurations
 |─ en/                # Folder containing English translations
@@ -270,7 +270,7 @@ localization/
 
 The `navigators/` folder manages the routing and navigation within the application. Each file defines a navigation stack that controls the flow between different screens in the app.
 
-```sh
+```
 navigators/
 |─ AuthenticateStack.tsx      # Stack for handling authentication-related navigation
 |─ ConnectStack.tsx           # Stack for managing connections navigation flow
@@ -290,7 +290,7 @@ navigators/
 
 The `screens/` folder contains the React components that represent each screen in the application. Each file encapsulates the layout, interaction, and styling seen by the user on that specific screen.
 
-```sh
+```
 screens/
 |─ AttemptLockout.tsx          # Screen shown when too many failed login attempts occur
 |─ Chat.tsx                    # Chat screen for messaging functionality
@@ -339,7 +339,7 @@ screens/
 
 The `services/` folder provides specific functionalities as services, such as secure storage handling and centralized logging, which are essential for maintaining security and diagnosing issues within the application.
 
-```sh
+```
 services/
 |─ keychain.ts      # Manages secure storage of sensitive data
 └─ logger.ts        # Centralized logging service for tracking application events and errors
@@ -349,7 +349,7 @@ services/
 
 The `types/` folder defines TypeScript types and interfaces that ensure consistent data structures and facilitate type checking across the application. This promotes reliable and safe code by catching potential type-related errors early.
 
-```sh
+```
 types/
 |─ chat.ts                  # Types related to chat features
 |─ credential-status.ts     # Defines types for managing credential statuses
@@ -374,7 +374,7 @@ types/
 
 The `utils/` folder contains utility functions and helpers that provide widely used functionalities throughout the application. These utilities help in data processing, performing calculations, handling cryptography, and other tasks that are not directly tied to the UI.
 
-```sh
+```
 utils/
 |─ agent.ts                   # Utility functions for managing agents
 |─ cred-def.ts                # Utilities related to credential definitions

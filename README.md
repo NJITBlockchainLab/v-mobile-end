@@ -1,175 +1,177 @@
 # Developers Guide
 
-The following document is intended to help developers get started with the project. It includes information on how to set up your development environment, build the project, and run the app in an emulator.
+## Table of Contents
+1. [Project Overview](#project-overview)
+2. [About Bifold](#about-bifold)
+3. [Setup](#setup)
+4. [Running the Application](#running-the-application)
+   - [Android Device or Emulator](#running-on-an-android-device-or-emulator)
+   - [iOS Device](#running-the-application-on-an-ios-device)
+5. [Project Structure](#project-structure)
+6. [Pro Tips](#pro-tips)
 
-# Project Overview
+---
 
-The application is a user-friendly mobile agent that is built with React Native and uses Aries Framework JavaScript (AFJ) to exchange verifiable credentials with other agents. While AFJ handles the heavy lifting of verifiable credential work, it focuses on user experience and interactions with these credentials.
+## Project Overview
 
-Key points to note:
+This application is a user-friendly mobile agent built with **React Native**, utilizing the **Aries Framework JavaScript (AFJ)** to exchange verifiable credentials with other agents. While AFJ manages most of the verifiable credential operations, this application focuses on providing an intuitive user experience for interacting with these credentials.
 
-- AFJ uses some Rust libraries, specifically Indy-SDK, which are compiled into native code. These libraries will soon be replaced by Indy-VDR and AnonCreds-rs.
-- The application uses the AFJ library, which in turn uses these Rust libraries.
-- The Indy-SDK library has been cross-compiled for ARM CPU architecture, meaning it works on iOS devices and Android devices/emulators but not on iOS simulators.
-- Indy-SDK uses the ZMQ protocol to interact with the Indy ledgers. This might be blocked by some corporate firewalls as it's a non-standard protocol that doesn't use HTTP/s.
-- AFJ uses the HTTP protocol to communicate with Aries agents and WebSockets for messaging via a mediator.
-- The application relies on a mediator because mobile devices don't have a fixed IP address and often don't accept inbound network connections. The mediator, a service that runs on a server with a fixed IP address, relays messages between an agent and the app. The mediator is configured,
+### Key Points to Note
+- **Rust Libraries:** The AFJ uses Rust libraries, specifically **Indy-SDK**, which are compiled into native code. These will soon be replaced by **Indy-VDR** and **AnonCreds-rs**.
+- **Cross-Compatibility:** The application is compatible with both iOS and Android devices/emulators but cannot run on iOS simulators.
+- **Communication Protocols:** The application uses **ZMQ protocol** to interact with Indy ledgers and **HTTP/WebSockets** for communicating with Aries agents.
+- **Mediator Service:** The app utilizes a mediator service that relays messages between the agent and the app, essential due to mobile devices having dynamic IP addresses.
+
+---
+
+## About Bifold
+
+**Bifold** is a core part of this project, leveraging the Aries Framework JavaScript to provide users with a seamless experience in managing and exchanging verifiable credentials on their mobile devices. The app bridges the gap between the user and the digital world, offering secure and efficient credential management.
+
+---
 
 ## Setup
 
-The setup is similar to other React Native projects. The following sections will walk you through the process of setting up your development environment, installing dependencies, and running the app in an emulator.
+The setup process is similar to other React Native applications. Follow these steps to set up your development environment and configuration.
 
 ### Prerequisites
 
-This is a [yarn](https://yarnpkg.com) based project, not [npm](https://www.npmjs.com/). You will need to install yarn if you don't already have it installed. Also, you will need a version of node that is compatible with the version of yarn specified in the `engines` field of [./package.json](./package.json). If you don't have a compatible version of node installed, you can use [nvm](https://github.com/nvm-sh/nvm) to install a compatible version of node.
+- **Yarn:** This project uses [yarn](https://yarnpkg.com). Install it globally if you don't already have it:
 
-```sh
-npm install -g yarn
+    ```sh
+    npm install -g yarn
+    ```
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+- **Node:** Install the version compatible with this project using [nvm](https://github.com/nvm-sh/nvm):
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+    ```sh
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
-nvm install 18.18
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-nvm use 18.18
-```
+    nvm install 18.18
+    nvm use 18.18
+    ```
 
-This project will need to run on an iOS device or Android device or emulator. While it is recommended to test your software on both, especially if you're contributing back to the project, for demonstration purposes you can choose one or the other.
+- **Development Environments:** Install [Android Studio](https://developer.android.com/studio) for Android or [Apple Xcode](https://developer.apple.com/xcode/) for iOS.
 
-[Android Studio](https://developer.android.com/studio)
-[Apple Xcode](https://developer.apple.com/xcode/)
+### Install Dependencies
 
-**ProTip 🤓**
-
-If you are using Mac OS with ARM64 chip, see this [suggested setup](./DEVELOPER_MACOS_arm64.md)
-
-### Setup & Configure for All Platforms
-
-Install all the package dependencies by running the following command from the root of the cloned repository:
+From the root directory of the cloned repository, install all package dependencies:
 
 ```sh
 yarn install
 ```
 
-Some packages need to be built (transpiled) before they can be used from the app. Do this with the following command:
+### Build the Project
+
+Some packages need to be transpiled before use:
 
 ```sh
 yarn run build
 ```
 
-As noted above the application requires a mediator to communicate with other Agents. For development purposes, this can be set by creating a `.env` file in the following directory:
+### Set Up the Mediator
+
+The application requires a mediator for communication. Create a `.env` file to configure it:
 
 ```sh
 touch packages/legacy/app/.env
 ```
 
-Add a line to the `.env` file with the following content:
+Add the mediator URL to this file:
 
 ```text
-MEDIATOR_URL=https://public.mediator.indiciotech.io?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMDVlYzM5NDItYTEyOS00YWE3LWEzZDQtYTJmNDgwYzNjZThhIiwgInNlcnZpY2VFbmRwb2ludCI6ICJodHRwczovL3B1YmxpYy5tZWRpYXRvci5pbmRpY2lvdGVjaC5pbyIsICJyZWNpcGllbnRLZXlzIjogWyJDc2dIQVpxSktuWlRmc3h0MmRIR3JjN3U2M3ljeFlEZ25RdEZMeFhpeDIzYiJdLCAibGFiZWwiOiAiSW5kaWNpbyBQdWJsaWMgTWVkaWF0b3IifQ==
+MEDIATOR_URL=https://public.mediator.indiciotech.io?c_i=...
 ```
 
-You can use the above mentioned public mediator hosted by Indecio or set up your own mediator. See [Aries Mediator](https://github.com/hyperledger/aries-mediator-service) for more information.
+You can use the provided public mediator or set up your own. For more information, refer to [Aries Mediator Service](https://github.com/hyperledger/aries-mediator-service).
 
-## Running on an Android Device or Emulator
+---
 
-The simplest way to run the application on Android is via Android Studio. Here's how:
+## Running the Application
 
-1. Open Android Studio.
-2. Select `File -> Open` and navigate to the `packages/legacy/app/android` directory. This will load the project into Android Studio.
-3. Run the app on a connected device or emulator by selecting one from the list and clicking the green 'Play' button.
+### Running on an Android Device or Emulator
 
-If you prefer using the command line interface (CLI), follow these steps:
+#### Using Android Studio
+1. Open **Android Studio**.
+2. Select `File -> Open` and navigate to `packages/legacy/app/android`.
+3. Select a device/emulator and click the green 'Play' button.
 
-### For Linux
+#### Using Command Line (Linux)
+1. **List Available Emulators:**
 
-(Note: The following instructions assume you have Android Studio and the Android SDK installed in your home directory. If your setup is different, adjust the paths accordingly.)
+    ```sh
+    ~/Android/Sdk/emulator/emulator -list-avds
+    ```
 
-1. List the available emulators:
+2. **Start an Emulator:**
 
-   ```sh
-   ~/Android/Sdk/emulator/emulator -list-avds
-   ```
+    ```sh
+    ~/Android/Sdk/emulator/emulator -avd Pixel_5_API_25 -netdelay none -netspeed full
+    ```
 
-   If no emulators are listed, check the Android Studio documentation to set up an emulator.
+3. **Start Metro:**
 
-**ProTip 🤓**
+    ```sh
+    cd packages/legacy/app
+    yarn start
+    ```
 
-Don't use the emulator located at `~/Android/Sdk/tools/emulator` its older, deprecated, and will probably complain about missing the x86 emulator for newer SDK versions.
+4. **Set Environment Variables:**
 
-2. Start an emulator from the list:
+    ```sh
+    export JAVA_HOME=~/android-studio/jre
+    export ANDROID_HOME=~/Android/Sdk
+    ```
 
-   ```sh
-   ~/Android/Sdk/emulator/emulator -avd Pixel_5_API_25 -netdelay none -netspeed full
-   ```
+5. **Run the App:**
 
-**ProTip 🤓**
+    ```sh
+    yarn run android
+    ```
 
-Use `-partition-size 1024` to increase the size of the emulator's data partition. This is useful if you're running the app in the emulator for an extended period of time.
+### Running the Application on an iOS Device
 
-3. Start Metro, the React Native packager:
+> Note: The app must run on a physical iOS device, not a simulator.
 
-   ```sh
-   cd packages/legacy/app
-   yarn start
-   ```
+1. **Install Cocoapods:**
 
-4. Make sure you have the `JAVA_HOME` and `ANDROID_HOME` environment variables set correctly:
+    ```sh
+    brew install cocoapods
+    ```
 
-   ```sh
-   export JAVA_HOME=~/android-studio/jre
-   export ANDROID_HOME=~/Android/Sdk
-   ```
+2. **Install Dependencies:**
 
-5. Allow the Android emulator to communicate with Metro on port `tcp:8097`:
+    ```sh
+    cd packages/legacy/app/ios
+    pod install
+    ```
 
-   ```sh
-   ~/Android/Sdk/platform-tools/adb reverse tcp:8097 tcp:8097
-   ```
+3. **Open the Workspace in Xcode:**
 
-6. Finally, run the app in the emulator:
+    ```sh
+    open packages/legacy/app/ios/ariesbifold.xcworkspace
+    ```
 
-   ```sh
-   cd packages/legacy/app
-   yarn run android
-   ```
+4. **Run the App:** In Xcode, select your device and click the 'Play' button.
 
-This will launch the application on your selected Android emulator for development and testing.
+---
 
-## Running the Application on an iOS Device
+## Project Structure
 
-Please note, you can't run the iOS version of the application on an iOS simulator – it must be run on an actual iOS device. To develop for iOS, you'll need a Mac with Xcode installed and potentially a developer team membership to execute the application on your device.
+To learn about the project structure, refer to [Project Structure](./project-structure.md).
 
-The easiest way to run the application on an iOS device is through Xcode, as outlined below:
+---
 
-1. Install the [Cocoapods](https://cocoapods.org/) package manager. You can use brew or any method you prefer:
+## Pro Tips 🤓
 
-```sh
-brew install cocoapods
-```
+- **MacOS ARM64:** Check [DEVELOPER_MACOS_arm64.md](./DEVELOPER_MACOS_arm64.md) if using a Mac with ARM64.
+- **Android Emulator:** Avoid using `~/Android/Sdk/tools/emulator` as it may not support newer SDK versions.
+- **Data Partition:** Use `-partition-size 1024` to extend the emulator's data partition.
+- **Communication:** Allow Android emulator communication with Metro on port `tcp:8097`.
 
-2. Install the necessary dependencies:
+---
 
-```sh
-cd packages/legacy/app/ios
-pod install
-```
-
-3. Open the workspace (not the project file) in Xcode:
-
-```sh
-open packages/legacy/app/ios/ariesbifold.xcworkspace
-```
-
-4. In Xcode, select your device, development team, and (if necessary) your Bundle ID. Note: Detailing these steps is beyond the scope of this guide.
-
-5. Run the app on your device by clicking the 'Play' button in Xcode. This will launch Bifold on your selected iOS device for development and testing. It will also launch Metro, the React Native packager, in a separate terminal window. If you prefer to do this manually use the following command:
-
-```sh
-cd packages/legacy/app
-yarn start
-```
-
-
+This README provides all the essential information to set up, run, and contribute to the project. Explore the source code and consider contributing to enhance this application!
